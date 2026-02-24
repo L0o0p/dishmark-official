@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DishMark | Loop Shen",
+  title: "DishMark （地食马） | 官方网站",
   description:
-    "DishMark is a food map app by Loop Shen for saving dishes, stores, and tasting notes.",
+    "DishMark （地食马）官方站点，包含产品介绍、用户协议、隐私政策、联系方式与版权信息。",
 };
 
 export default function RootLayout({
@@ -24,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="zh-CN">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
