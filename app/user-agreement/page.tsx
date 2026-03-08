@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { siteConfig } from "../siteConfig";
 
 export default function UserAgreementPage() {
   return (
@@ -9,7 +10,7 @@ export default function UserAgreementPage() {
 
         <section className="mt-6 space-y-4 text-sm leading-7 text-stone-700">
           <p>
-            欢迎使用 DishMark（以下简称“本应用”）。本协议由开发者 Loop Shen 与用户共同缔结。
+            欢迎使用 DishMark（以下简称“本应用”）。本协议由开发者 {siteConfig.ownerName} 与用户共同缔结。
             用户在下载、安装、注册或使用本应用前，应充分阅读并理解本协议。
           </p>
           <p>

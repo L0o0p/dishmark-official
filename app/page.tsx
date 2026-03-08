@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { siteConfig } from "./siteConfig";
 
 export default function Home() {
   return (
@@ -61,9 +62,6 @@ export default function Home() {
               DishMark 是一款用于记录“吃过什么、在哪吃、体验如何”的美食标记应用。
               用户可在地图上标记店铺与菜品，保存图片、口味、排队时长与用餐笔记，便于后续回顾与分享。
             </p>
-            {/* <p className="mt-3 leading-8 text-stone-700">
-              开发者：Loop Shen（独立开发者）
-            </p> */}
           </article>
           <aside className="rounded-2xl border border-black/10 bg-amber-50 p-5">
             <h3 className="text-lg font-semibold text-stone-900">应用基础信息</h3>
@@ -74,7 +72,9 @@ export default function Home() {
             <p className="text-sm leading-7 text-stone-700">
               官方网站：https://dishmark.loopshen.top
             </p>
-            <p className="text-sm leading-7 text-stone-700">版权所有者：Loop Shen</p>
+            <p className="text-sm leading-7 text-stone-700">
+              版权所有者：{siteConfig.ownerName}
+            </p>
           </aside>
         </div>
 
@@ -160,7 +160,7 @@ export default function Home() {
               2947232977@qq.com
             </a>
           </p>
-          <p className="mt-2 text-stone-700">开发者：Loop Shen</p>
+          <p className="mt-2 text-stone-700">开发者：{siteConfig.ownerName}</p>
         </article>
 
         <article className="rounded-2xl border border-black/10 bg-white/80 p-6 shadow-sm">
@@ -186,9 +186,12 @@ export default function Home() {
       </section>
 
       <footer className="mt-8 rounded-2xl border border-black/10 bg-white/80 p-6 text-sm leading-7 text-stone-600">
-        <p>版权所有者：Loop Shen</p>
-        <p>Copyright © {new Date().getFullYear()} Loop Shen. All Rights Reserved.</p>
-        <p>网站备案信息：备案申请中（上线后将更新为正式备案号）</p>
+        <p>版权所有者：{siteConfig.ownerName}</p>
+        <p>
+          Copyright © {new Date().getFullYear()} {siteConfig.ownerName}. All
+          Rights Reserved.
+        </p>
+        <p>网站备案信息：{siteConfig.icpRecordNumber}</p>
       </footer>
     </main>
   );
