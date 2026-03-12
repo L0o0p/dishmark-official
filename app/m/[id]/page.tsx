@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import OpenInAppButton from "./OpenInAppButton";
 
 type MomentPageProps = {
   params: Promise<{ id: string }>;
@@ -26,16 +27,11 @@ export default async function MomentPage({ params }: MomentPageProps) {
           在 App 中打开
         </h1>
         <p className="mt-4 text-base leading-7 text-stone-700">
-          你正在查看 DishMark 分享内容，点击下方按钮将通过 Universal Link 打开 App。
+          你正在查看 DishMark 分享内容，点击下方按钮将拉起 App。
         </p>
 
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-          <a
-            href={universalLink}
-            className="inline-flex items-center justify-center rounded-full bg-stone-900 px-6 py-3 text-sm font-medium text-white transition hover:bg-stone-700"
-          >
-            在 App 中打开
-          </a>
+          <OpenInAppButton momentId={id} universalLink={universalLink} />
           <span className="text-xs text-stone-500">若未安装 App，将停留在当前网页。</span>
         </div>
       </section>
