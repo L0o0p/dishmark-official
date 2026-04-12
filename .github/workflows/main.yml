@@ -35,7 +35,7 @@ jobs:
             --exclude='node_modules' \
             --exclude='.next' \
             --exclude='.github' \
-            -czf release.tgz .
+            -czf "${{ runner.temp }}/release.tgz" .
 
       - name: Upload release package to server
         uses: appleboy/scp-action@v0.1.7
@@ -44,7 +44,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_PORT }}
-          source: "release.tgz"
+          source: "${{ runner.temp }}/release.tgz"
           target: "/tmp"
 
       - name: Deploy on server
