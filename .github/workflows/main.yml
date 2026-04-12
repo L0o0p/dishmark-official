@@ -35,7 +35,10 @@ jobs:
             --exclude='node_modules' \
             --exclude='.next' \
             --exclude='.github' \
-            -czf "${{ runner.temp }}/release.tgz" .
+            -czf release.tgz .
+
+          echo "===== package content preview ====="
+          tar -tzf release.tgz | head -50
 
       - name: Upload release package to server
         uses: appleboy/scp-action@v0.1.7
@@ -44,7 +47,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_PORT }}
-          source: "${{ runner.temp }}/release.tgz"
+          source: "release.tgz"
           target: "/tmp"
 
       - name: Deploy on server
@@ -59,17 +62,34 @@ jobs:
 
             APP_DIR=/opt/apps/loopshen-top
             RELEASE_DIR=/opt/apps/loopshen-top-release
+            PKG_FILE=/tmp/release.tgz
+
+            echo "===== check uploaded package ====="
+            ls -lah /tmp
+            test -f $PKG_FILE
 
             rm -rf $RELEASE_DIR
             mkdir -p $RELEASE_DIR
-            tar -xzf /tmp/release.tgz -C $RELEASE_DIR
+
+            tar -xzf $PKG_FILE -C $RELEASE_DIR
+
+            echo "===== extracted files ====="
+            ls -lah $RELEASE_DIR
+            test -f $RELEASE_DIR/package.json
 
             cd $RELEASE_DIR
+            corepack enable
             corepack yarn install --immutable
             corepack yarn build
 
+            systemctl stop loopshen-next || true
+
             rm -rf $APP_DIR
             mv $RELEASE_DIR $APP_DIR
+
+            echo "===== final app dir ====="
+            ls -lah $APP_DIR
+            test -f $APP_DIR/package.json
 
             systemctl restart loopshen-next
             systemctl status loopshen-next --no-pager
