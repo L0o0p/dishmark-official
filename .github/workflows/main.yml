@@ -1,4 +1,4 @@
-name: Deploy to ECS
+name: Deploy Next.js to ECS
 
 on:
   push:
@@ -18,24 +18,34 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
       - name: Install deps
         run: npm ci
 
-      - name: Build
-        run: npm run build
+      - name: Run tests if present
+        run: npm test --if-present
 
-      - name: Copy files to server
+      - name: Create release package
+        run: |
+          tar \
+            --exclude='.git' \
+            --exclude='node_modules' \
+            --exclude='.next' \
+            --exclude='.github' \
+            -czf release.tgz .
+
+      - name: Upload release package to server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_PORT }}
-          source: "dist/*"
-          target: "/var/www/loopshen.top"
+          source: "release.tgz"
+          target: "/tmp"
 
-      - name: Reload nginx
+      - name: Deploy on server
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -43,4 +53,21 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
-            sudo systemctl reload nginx
+            set -e
+
+            APP_DIR=/opt/apps/loopshen-top
+            RELEASE_DIR=/opt/apps/loopshen-top-release
+
+            rm -rf $RELEASE_DIR
+            mkdir -p $RELEASE_DIR
+            tar -xzf /tmp/release.tgz -C $RELEASE_DIR
+
+            cd $RELEASE_DIR
+            npm ci
+            npm run build
+
+            rm -rf $APP_DIR
+            mv $RELEASE_DIR $APP_DIR
+
+            systemctl restart loopshen-next
+            systemctl status loopshen-next --no-pager
