@@ -30,17 +30,15 @@ jobs:
 
       - name: Create release package
         run: |
-          tar \
-            --exclude='.git' \
-            --exclude='node_modules' \
-            --exclude='.next' \
-            --exclude='.github' \
-            --exclude='release.tgz' \
-            -czf release.tgz .
+          rm -rf .deploy-package
+          mkdir -p .deploy-package
+
+          rsync -av --exclude '.git' --exclude 'node_modules' --exclude '.next' --exclude '.github' --exclude '.deploy-package' ./ .deploy-package/
+
+          tar -czf release.tgz -C .deploy-package .
 
           echo "===== package content preview ====="
           tar -tzf release.tgz | head -50
-
       - name: Upload release package to server
         uses: appleboy/scp-action@v0.1.7
         with:
