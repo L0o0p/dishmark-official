@@ -35,6 +35,7 @@ jobs:
             --exclude='node_modules' \
             --exclude='.next' \
             --exclude='.github' \
+            --exclude='release.tgz' \
             -czf release.tgz .
 
           echo "===== package content preview ====="
