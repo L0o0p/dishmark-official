@@ -183,7 +183,7 @@ export default function PulseHome() {
                         Copyright © {new Date().getFullYear()} {siteConfig.ownerName}. All
                         Rights Reserved.
                     </p>
-                    <p>网站备案信息：{siteConfig.icpRecordNumber}</p>
+                    <p>网站备案信息：<a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">{siteConfig.icpRecordNumber}</a></p>
                 </footer>
             </div>
         </main>
